@@ -1,4 +1,0 @@
-CREATE TABLE USUARIO(
-    email character varying(50) NOT NULL,
-    senha text NOT NULL
-);
