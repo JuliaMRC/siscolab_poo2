@@ -4,4 +4,4 @@ CREATE TABLE USUARIO_FISICO (
     nome character varying(30) NOT NULL,
     sobrenome character varying(30),
     nascimento date NOT NULL,
-);
+)inherits(USUARIO);
