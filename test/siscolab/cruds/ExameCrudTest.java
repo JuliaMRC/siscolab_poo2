@@ -40,7 +40,7 @@ public class ExameCrudTest {
     
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         dat1 = new int[3];
         dat1[0] = 21;
         dat1[1] = 5;
@@ -56,11 +56,11 @@ public class ExameCrudTest {
         dat3[1] = 5;
         dat3[2] = 1998;
         
-        esp = new Especialidade("Cardiologista");
+        esp = new Especialidade("Ginecologista");
         
         med = new Medico();
-        med.setCpf("83973956014");
-        med.setRg("1234568");
+        med.setCpf("68009328090");
+        med.setRg("1234569");
         med.setNome("Matheus");
         med.setSobrenome("Garcias");
         med.setDataNascimento(dat3);
@@ -70,10 +70,10 @@ public class ExameCrudTest {
         med.setEspecialidade(esp);
         med.setMunicipioAtuacao("Serra");
         
-        plano = new PlanoSaude(2, dat2, "Unimed");
+        plano = new PlanoSaude(3, dat2, "Unimed");
         
         pac = new Paciente();
-        pac.setCpf("00490716105");
+        pac.setCpf("45792425051");
         pac.setRg("3452001");
         pac.setNome("Letícia");
         pac.setSobrenome("Teixeira");

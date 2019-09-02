@@ -28,7 +28,7 @@ public class PacienteCrudTest {
     
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         dat1 = new int[3];
         dat1[0] = 22;
         dat1[1] = 8;
@@ -57,7 +57,6 @@ public class PacienteCrudTest {
         pac1.setPlanoSaude(plano);
         pac1.setMunicipioResidencia("Serra");
         
-        pac2 = new Paciente();
         
         pac3 = new Paciente();
         pac3.setCpf("16951782709");

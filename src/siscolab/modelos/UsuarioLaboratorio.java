@@ -9,20 +9,17 @@ package siscolab.modelos;
  *
  * @author Julia
  */
-public class UsuarioLaboratorio {
+public class UsuarioLaboratorio extends Usuario{
     private String nomeFantasia;
     private String cnpj;
-    private String email;
-    private String senha;
 
 
     public UsuarioLaboratorio(){}
     
     public UsuarioLaboratorio (String nomeFantasia, String cnpj, String email, String senha) throws Exception{
+        super(email,senha);
         this.setNomeFantasia(nomeFantasia);
         this.setCnpj(cnpj);
-        this.setEmail(email);
-        this.setSenha(senha);
     }
 
     //GETTERS
@@ -35,14 +32,6 @@ public class UsuarioLaboratorio {
         return cnpj;
     }
     
-    public String getEmail() {
-        return email;
-    }
-    
-    public String getSenha() {
-        return senha;
-    }
-
     //SETTERS
     
     public void setNomeFantasia(String nomeFantasia) {
@@ -60,21 +49,6 @@ public class UsuarioLaboratorio {
         }
     }
 
-    public void setEmail(String email) throws Exception{
-        try{
-            if(Validacao.validaEmail(email)){
-                this.email = email;
-            }
-        }
-        catch(Exception ex) {
-            ex.printStackTrace();
-        } 
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
-    
     
 
 }
