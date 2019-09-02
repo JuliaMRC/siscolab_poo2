@@ -3,5 +3,5 @@ CREATE TABLE USUARIO_FISICO (
     rg character varying(7) UNIQUE,
     nome character varying(30) NOT NULL,
     sobrenome character varying(30),
-    nascimento date NOT NULL,
+    nascimento date NOT NULL
 )inherits(USUARIO);
