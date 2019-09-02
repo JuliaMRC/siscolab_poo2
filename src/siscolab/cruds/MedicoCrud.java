@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import siscolab.modelos.Medico;
 import siscolab.modelos.Especialidade;
 
@@ -43,7 +45,7 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
             data += String.format("%d", cl.getDataNascimento()[0]);
         }
         
-        String sql = String.format("INSERT INTO USUARIO (cpf, rg, nome, sobrenome, nascimento, email, senha) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n", cl.getCpf(), cl.getRg(), cl.getNome(), cl.getSobrenome(), data, cl.getEmail(), cl.getSenha());
+        String sql = String.format("INSERT INTO USUARIO_FISICO (cpf, rg, nome, sobrenome, nascimento, email, senha) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n", cl.getCpf(), cl.getRg(), cl.getNome(), cl.getSobrenome(), data, cl.getEmail(), cl.getSenha());
         sql += String.format("INSERT INTO MEDICO (crm, especialidade_fk, municipio, cpf_fk) VALUES ('%s', '%s', '%s', '%s')", cl.getCrm(), cl.getEspecialidade().getEspecialidade(), cl.getMunicipioAtuacao(), cl.getCpf());
     
         this.conectar();
@@ -60,8 +62,8 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
         Medico cl;
         EspecialidadeCrud ec = new EspecialidadeCrud(this.getConnString(), this.getUser(), this.getPass());
         
-        String sql = "SELECT * FROM MEDICO as m\n";
-        sql += String.format("INNER JOIN USUARIO as u on (m.cpf_fk = u.cpf)\n");
+        String sql = "SELECT *, medico_fk FROM MEDICO as m\n";
+        sql += String.format("INNER JOIN USUARIO_FISICO as u on (m.cpf_fk = u.cpf)\n");
         sql += String.format("WHERE %s = '%s'", chave, valor);
         
         this.conectar();
@@ -79,7 +81,11 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
             cl.setRg(rs.getString("rg"));
             cl.setNome(rs.getString("nome"));
             cl.setSobrenome(rs.getString("sobrenome"));
-            cl.setEmail(rs.getString("email"));
+            try {
+                cl.setEmail(rs.getString("email"));
+            } catch (Exception ex) {
+                Logger.getLogger(MedicoCrud.class.getName()).log(Level.SEVERE, null, ex);
+            }
             cl.setSenha(rs.getString("senha"));
             //String date = convertToDateString(rs.getDate("validade"));
             //cl.setData(date);
@@ -98,7 +104,7 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
         
         String sql = "";
         
-        sql += String.format("UPDATE USUARIO set cpf = '%s',\n", cl.getCpf());
+        sql += String.format("UPDATE USUARIO_FISICO set cpf = '%s',\n", cl.getCpf());
         sql += String.format("rg = '%s',\n", cl.getRg());
         sql += String.format("nome = '%s',\n", cl.getNome());
         sql += String.format("sobrenome = '%s',\n", cl.getSobrenome());
@@ -138,7 +144,7 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
         EspecialidadeCrud ec = new EspecialidadeCrud(this.getConnString(), this.getUser(), this.getPass());
 
         String sql = "SELECT * FROM MEDICO as m\n";
-        sql += "INNER JOIN USUARIO as p on (m.cpf_fk = p.cpf)";
+        sql += "INNER JOIN USUARIO_FISICO as p on (m.cpf_fk = p.cpf)";
         
         this.conectar();
         stmt = this.getConn().createStatement();
@@ -154,7 +160,11 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
             cl.setRg(rs.getString("rg"));
             cl.setNome(rs.getString("nome"));
             cl.setSobrenome(rs.getString("sobrenome"));
-            cl.setEmail(rs.getString("email"));
+            try {
+                cl.setEmail(rs.getString("email"));
+            } catch (Exception ex) {
+                Logger.getLogger(MedicoCrud.class.getName()).log(Level.SEVERE, null, ex);
+            }
             cl.setSenha(rs.getString("senha"));
             //String date = convertToDateString(rs.getDate("validade"));
             //cl.setData(date);

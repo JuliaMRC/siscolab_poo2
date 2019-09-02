@@ -30,7 +30,7 @@ public class MedicoCrudTest {
     
     
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         dat1 = new int[3];
         dat1[0] = 22;
         dat1[1] = 8;
