@@ -104,6 +104,3 @@ public class UsuarioFisico extends Usuario implements Serializable, HasCrud{
     }
 }
    
-
-
-    

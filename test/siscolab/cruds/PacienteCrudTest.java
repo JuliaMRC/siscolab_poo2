@@ -21,10 +21,10 @@ import siscolab.modelos.PlanoSaude;
  */
 public class PacienteCrudTest {
     PacienteCrud pacCrud;
-    Paciente pac1, pac2, pac3;
+    Paciente pac1, pac2;
     ArrayList lista;
     PlanoSaude plano;
-    int[] dat1, dat2, dat3;
+    int[] dat1, dat2;
     
     
     @Before
@@ -39,14 +39,10 @@ public class PacienteCrudTest {
         dat2[1] = 5;
         dat2[2] = 2020;
         
-        dat3 = new int[3];
-        dat3[0] = 21;
-        dat3[1] = 5;
-        dat3[2] = 1998;
         
         plano = new PlanoSaude(1, dat2, "Samp");
         
-        pac1 = new Paciente();
+        pac1 = new Paciente.Builder(plano, "Serra").build();
         pac1.setCpf("34088955030");
         pac1.setRg("3452007");
         pac1.setNome("Letícia");
@@ -54,20 +50,17 @@ public class PacienteCrudTest {
         pac1.setDataNascimento(dat1);
         pac1.setEmail("leticia@gmail.com");
         pac1.setSenha("87654321");
-        pac1.setPlanoSaude(plano);
-        pac1.setMunicipioResidencia("Serra");
+
         
-        
-        pac3 = new Paciente();
-        pac3.setCpf("16951782709");
-        pac3.setRg("1234567");
-        pac3.setNome("Matheus");
-        pac3.setSobrenome("Garcias");
-        pac3.setDataNascimento(dat3);
-        pac3.setEmail("matheus@gmail.com");
-        pac3.setSenha("12345678");
-        pac3.setPlanoSaude(plano);
-        pac3.setMunicipioResidencia("Serra");
+        pac2 = new Paciente.Builder(plano, "Serra").build();
+        pac2.setCpf("16951782709");
+        pac2.setRg("1234567");
+        pac2.setNome("Matheus");
+        pac2.setSobrenome("Garcias");
+        pac2.setDataNascimento(dat2);
+        pac2.setEmail("matheus@gmail.com");
+        pac2.setSenha("12345678");
+
         
         lista = new ArrayList();
     }
@@ -120,7 +113,7 @@ public class PacienteCrudTest {
             Logger.getLogger(PacienteCrudTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            pacCrud.crudAtualizar(pac3,"nome","Maria");
+            pacCrud.crudAtualizar(pac2,"nome","Maria");
         }
         catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(PacienteCrudTest.class.getName()).log(Level.SEVERE, null, ex);

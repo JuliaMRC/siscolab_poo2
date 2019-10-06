@@ -15,15 +15,21 @@ public class Medico extends UsuarioFisico implements HasCrud {
     private String crm;
     private Especialidade especialidade;
     private String municipioAtuacao;
+
+    private Medico(Builder builder) {
+        this.crm = builder.crm;
+        this.especialidade = builder.especialidade;
+        this.municipioAtuacao = builder.municipioAtuacao;
+    }
     
     public Medico(){}
     
-    public Medico(String cpf, String rg, String nome, String sobrenome, int[] dataNascimento, String email, String senha, String crm, Especialidade especialidade, String municipioAtuacao) throws Exception {
+    /*public Medico(String cpf, String rg, String nome, String sobrenome, int[] dataNascimento, String email, String senha, String crm, Especialidade especialidade, String municipioAtuacao) throws Exception {
         super(cpf, rg, nome, sobrenome, dataNascimento, email, senha);
         this.setCrm(crm);
         this.setEspecialidade(especialidade);
         this.setMunicipioAtuacao(municipioAtuacao);
-    }
+    }*/
 
     // Getters
 
@@ -52,4 +58,22 @@ public class Medico extends UsuarioFisico implements HasCrud {
     public void setMunicipioAtuacao(String municipioAtuacao) {
         this.municipioAtuacao = municipioAtuacao;
     }
+    
+    
+    public static class Builder{
+        private String crm;
+        private Especialidade especialidade;
+        private String municipioAtuacao;
+        
+        public Builder(String crm, Especialidade especialidade, String municipioAtuacao) throws Exception {
+            this.crm = crm;
+            this.especialidade = especialidade;
+            this.municipioAtuacao = municipioAtuacao;
+        }
+        
+        public Medico build(){
+            return new Medico(this);
+        }
+    }
+    
 }

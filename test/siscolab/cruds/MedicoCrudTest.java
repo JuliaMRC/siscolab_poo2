@@ -23,10 +23,10 @@ import siscolab.modelos.Medico;
 public class MedicoCrudTest {
     
     MedicoCrud medCrud;
-    Medico med1, med2, med3;
+    Medico med1, med2;
+    Especialidade esp1, esp2;
     ArrayList lista;
-    Especialidade esp;
-    int[] dat1, dat2, dat3;
+    int[] dat1, dat2;
     
     
     @Before
@@ -41,40 +41,36 @@ public class MedicoCrudTest {
         dat2[1] = 5;
         dat2[2] = 2020;
         
-        dat3 = new int[3];
-        dat3[0] = 21;
-        dat3[1] = 5;
-        dat3[2] = 1998;
         
-        esp = new Especialidade("Cardiologista");
+        esp1 = new Especialidade("Cardiologista");
         
-        med1 = new Medico();
-        med1.setCpf("00490716105");
+        med1 = new Medico.Builder("87654351", esp1, "Serra").build();
+        med1.setCpf("39589013015");
         med1.setRg("3452001");
         med1.setNome("Letícia");
         med1.setSobrenome("Teixeira");
         med1.setDataNascimento(dat1);
         med1.setEmail("leticia@gmail.com");
         med1.setSenha("87654321");
-        med1.setCrm("87654321");
+        /*med1.setCrm("87654321");
         med1.setEspecialidade(esp);
-        med1.setMunicipioAtuacao("Serra");
+        med1.setMunicipioAtuacao("Serra");*/
         
-        med2 = new Medico();
         
-        esp.setEspecialidade("Pediatra");
+        esp2 = new Especialidade("Pediatra");
                 
-        med3 = new Medico();
-        med3.setCpf("01245843060");
-        med3.setRg("1235567");
-        med3.setNome("Matheus");
-        med3.setSobrenome("Garcias");
-        med3.setDataNascimento(dat3);
-        med3.setEmail("matheus@gmail.com");
-        med3.setSenha("12345678");
-        med3.setCrm("12345678");
-        med3.setEspecialidade(esp);
-        med3.setMunicipioAtuacao("Serra");
+        med2 = new Medico.Builder("12345678", esp2, "Serra").build();
+        
+        med2.setCpf("16815006042");
+        med2.setRg("1235567");
+        med2.setNome("Matheus");
+        med2.setSobrenome("Garcias");
+        med2.setDataNascimento(dat2);
+        med2.setEmail("matheus@gmail.com");
+        med2.setSenha("12345678");
+        /*med2.setCrm("12345678");
+        med2.setEspecialidade(esp);
+        med2.setMunicipioAtuacao("Serra");*/
         
         lista = new ArrayList();
     }
@@ -127,7 +123,7 @@ public class MedicoCrudTest {
             Logger.getLogger(MedicoCrudTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            medCrud.crudAtualizar(med3,"nome","Letícia");
+            medCrud.crudAtualizar(med2,"nome","Júlia");
         }
         catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(MedicoCrudTest.class.getName()).log(Level.SEVERE, null, ex);

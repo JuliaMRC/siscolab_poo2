@@ -18,10 +18,9 @@ public class Paciente extends UsuarioFisico implements HasCrud{
     
     public Paciente(){}
     
-    public Paciente(String cpf, String rg, String nome, String sobrenome, int[] dataNascimento, String email, String senha, PlanoSaude planoSaude, String municipioResidencia) throws Exception{
-        super(cpf, rg, nome, sobrenome, dataNascimento, email, senha);
-        this.setPlanoSaude(planoSaude);
-        this.setMunicipioResidencia(municipioResidencia);
+    private Paciente(Builder builder) {
+        this.planoSaude = builder.planoSaude;
+        this.municipioResidencia = builder.municipioResidencia;
     }
 
     //GETTERS
@@ -44,4 +43,17 @@ public class Paciente extends UsuarioFisico implements HasCrud{
         this.municipioResidencia = municipioResidencia;
     }
 
+    public static class Builder{
+        private PlanoSaude planoSaude;
+        private String municipioResidencia;
+        
+        public Builder (PlanoSaude planoSaude, String municipioResidencia){
+            this.planoSaude = planoSaude;
+            this.municipioResidencia = municipioResidencia;
+        }
+        
+        public Paciente build(){
+            return new Paciente(this);
+        }
+    }
 }

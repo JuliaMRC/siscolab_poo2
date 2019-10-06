@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,8 +31,11 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
         Statement stmt;
         Medico cl = (Medico) classe;
         String data;
-        
+        System.out.println("estou aqui: " + cl.getCpf());
+        System.out.println("estou aqui: " + cl.getCrm());
+        System.out.println("estou aqui: " + Arrays.toString(cl.getDataNascimento()));
         if(cl.getDataNascimento()[1]<10){
+            
             data = String.format("%d-0%d-", cl.getDataNascimento()[2], cl.getDataNascimento()[1]);
         }
         else{
@@ -62,7 +66,7 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
         Medico cl;
         EspecialidadeCrud ec = new EspecialidadeCrud(this.getConnString(), this.getUser(), this.getPass());
         
-        String sql = "SELECT *, medico_fk FROM MEDICO as m\n";
+        String sql = "SELECT *, cpf_fk FROM MEDICO as m\n";
         sql += String.format("INNER JOIN USUARIO_FISICO as u on (m.cpf_fk = u.cpf)\n");
         sql += String.format("WHERE %s = '%s'", chave, valor);
         
