@@ -30,60 +30,16 @@ public class ExameCrud extends PostgresConn implements ICrud<String, String> {
     public void crudCriar(HasCrud classe) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         Statement stmt;
         Exame cl = (Exame) classe;
-        String dPrazo,dReq,dExec,dResult;
         
-        if(cl.getDataPrazo()[1]<10){
-            dPrazo = String.format("%d-0%d-", cl.getDataPrazo()[2], cl.getDataPrazo()[1]);
-        }
-        else{
-            dPrazo = String.format("%d-%d-", cl.getDataPrazo()[2], cl.getDataPrazo()[1]);
-        }
-        if(cl.getDataPrazo()[1]<10){
-            dPrazo += String.format("0%d", cl.getDataPrazo()[0]);
-        }
-        else{
-            dPrazo += String.format("%d", cl.getDataPrazo()[0]);
-        }
+        String dPrazo = utils.converteData(cl.getDataPrazo());
+                
+        String dReq = utils.converteData(cl.getDataRequerimento());
         
-        if(cl.getDataRequerimento()[1]<10){
-            dReq = String.format("%d-0%d-", cl.getDataRequerimento()[2], cl.getDataRequerimento()[1]);
-        }
-        else{
-            dReq = String.format("%d-%d-", cl.getDataRequerimento()[2], cl.getDataRequerimento()[1]);
-        }
-        if(cl.getDataRequerimento()[1]<10){
-            dReq += String.format("0%d", cl.getDataRequerimento()[0]);
-        }
-        else{
-            dReq += String.format("%d", cl.getDataRequerimento()[0]);
-        }
+        String dExec = utils.converteData(cl.getDataExecucao());
         
-        if(cl.getDataExecucao()[1]<10){
-            dExec = String.format("%d-0%d-", cl.getDataExecucao()[2], cl.getDataExecucao()[1]);
-        }
-        else{
-            dExec = String.format("%d-%d-", cl.getDataExecucao()[2], cl.getDataExecucao()[1]);
-        }
-        if(cl.getDataExecucao()[1]<10){
-            dExec += String.format("0%d", cl.getDataExecucao()[0]);
-        }
-        else{
-            dExec += String.format("%d", cl.getDataExecucao()[0]);
-        }
+        String dResult = utils.converteData(cl.getDataResultado());
         
-        if(cl.getDataResultado()[1]<10){
-            dResult = String.format("%d-0%d-", cl.getDataResultado()[2], cl.getDataResultado()[1]);
-        }
-        else{
-            dResult = String.format("%d-%d-", cl.getDataResultado()[2], cl.getDataResultado()[1]);
-        }
-        if(cl.getDataResultado()[1]<10){
-            dResult += String.format("0%d", cl.getDataResultado()[0]);
-        }
-        else{
-            dResult += String.format("%d", cl.getDataResultado()[0]);
-        }
-        
+    
         String sql = String.format("INSERT INTO EXAME (tipo, data_prazo, materia, paciente_fk, medico_fk, reagente, resultado, data_requerimento, data_execucao, data_resultado, estado) "
                 + "                 VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", 
                                     cl.getTipoExame(), dPrazo, cl.getMateria(), cl.getPaciente().getCpf(), cl.getMedico().getCpf(), cl.getReagente(), cl.getResultado(), dReq, dExec, dResult, cl.getEstado());

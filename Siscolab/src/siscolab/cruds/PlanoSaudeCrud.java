@@ -28,22 +28,8 @@ public class PlanoSaudeCrud extends PostgresConn implements ICrud<String, String
     public void crudCriar(HasCrud classe) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         Statement stmt;
         PlanoSaude cl = (PlanoSaude) classe;
-        String data;
         
-
-        if(cl.getValidade()[1]<10){
-            data = String.format("%d-0%d-", cl.getValidade()[2], cl.getValidade()[1]);
-        }
-        else{
-            data = String.format("%d-%d-", cl.getValidade()[2], cl.getValidade()[1]);
-        }
-        
-        if(cl.getValidade()[1]<10){
-            data += String.format("0%d", cl.getValidade()[0]);
-        }
-        else{
-            data += String.format("%d", cl.getValidade()[0]);
-        } 
+        String data = utils.converteData(cl.getValidade());
 
         String sql = String.format("INSERT INTO PLANO_SAUDE(numero, validade, empresa) VALUES('%s', '%s', '%s')", cl.getNumero(), data, cl.getEmpresa());
         

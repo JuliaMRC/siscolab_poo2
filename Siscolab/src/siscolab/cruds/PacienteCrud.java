@@ -30,24 +30,10 @@ public class PacienteCrud extends PostgresConn implements ICrud<String, String> 
     public void crudCriar(HasCrud classe) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         Paciente cl = (Paciente) classe;
         Statement stmt;
-        String data;
-        
-        if(cl.getDataNascimento()[1]<10){
-            data = String.format("%d-0%d-", cl.getDataNascimento()[2], cl.getDataNascimento()[1]);
-        }
-        else{
-            data = String.format("%d-%d-", cl.getDataNascimento()[2], cl.getDataNascimento()[1]);
-        }
-        
-        if(cl.getDataNascimento()[1]<10){
-            data += String.format("0%d", cl.getDataNascimento()[0]);
-        }
-        else{
-            data += String.format("%d", cl.getDataNascimento()[0]);
-        } 
+
+        String data = utils.converteData(cl.getDataNascimento());
         
         String sql = String.format("INSERT INTO USUARIO_FISICO (cpf, rg, nome, sobrenome, nascimento, email, senha) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n", cl.getCpf(), cl.getRg(), cl.getNome(), cl.getSobrenome(), data, cl.getEmail(), cl.getSenha());
-        
         
         this.conectar();
         stmt = this.getConn().createStatement();

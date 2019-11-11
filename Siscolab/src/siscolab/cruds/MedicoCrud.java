@@ -25,29 +25,15 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
     public MedicoCrud(String connString, String user, String pass) throws SQLException {
         super(connString, user, pass);
     } 
+    
+
 
     @Override
     public void crudCriar(HasCrud classe) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         Statement stmt;
         Medico cl = (Medico) classe;
-        String data;
-        System.out.println("estou aqui: " + cl.getCpf());
-        System.out.println("estou aqui: " + cl.getCrm());
-        System.out.println("estou aqui: " + Arrays.toString(cl.getDataNascimento()));
-        if(cl.getDataNascimento()[1]<10){
-            
-            data = String.format("%d-0%d-", cl.getDataNascimento()[2], cl.getDataNascimento()[1]);
-        }
-        else{
-            data = String.format("%d-%d-", cl.getDataNascimento()[2], cl.getDataNascimento()[1]);
-        }
         
-        if(cl.getDataNascimento()[1]<10){
-            data += String.format("0%d", cl.getDataNascimento()[0]);
-        }
-        else{
-            data += String.format("%d", cl.getDataNascimento()[0]);
-        }
+        String data = utils.converteData(cl.getDataNascimento());
         
         String sql = String.format("INSERT INTO USUARIO_FISICO (cpf, rg, nome, sobrenome, nascimento, email, senha) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n", cl.getCpf(), cl.getRg(), cl.getNome(), cl.getSobrenome(), data, cl.getEmail(), cl.getSenha());
         sql += String.format("INSERT INTO MEDICO (crm, especialidade_fk, municipio, cpf_fk) VALUES ('%s', '%s', '%s', '%s')", cl.getCrm(), cl.getEspecialidade().getEspecialidade(), cl.getMunicipioAtuacao(), cl.getCpf());
