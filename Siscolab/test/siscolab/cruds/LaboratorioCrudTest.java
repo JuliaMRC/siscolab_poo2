@@ -12,14 +12,17 @@ import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 import siscolab.modelos.Laboratorio;
 
 /**
  *
  * @author Julia
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class LaboratorioCrudTest {
-    LaboratorioCrud labCrud;
+    LaboratorioCrud labCrud = new LaboratorioCrud();
     Laboratorio lab1, lab2, lab3;
     ArrayList lista;
     String[] planos;
@@ -52,14 +55,7 @@ public class LaboratorioCrudTest {
     }
 
     @Test
-    public void testCrudCriar() throws Exception {
-        try {
-            labCrud = new LaboratorioCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(LaboratorioCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+    public void test1CrudCriar() throws Exception {
         try {
             labCrud.crudCriar(lab1);
         }
@@ -70,13 +66,7 @@ public class LaboratorioCrudTest {
     }
     
     @Test
-    public void testCrudLer() throws Exception {
-        try {
-            labCrud = new LaboratorioCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(LaboratorioCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test2CrudLer() throws Exception {
         try {
             lab2 = (Laboratorio)labCrud.crudLer("municipio","Serra");
         }
@@ -87,13 +77,8 @@ public class LaboratorioCrudTest {
     }
     
     @Test
-    public void testCrudAtualizar() throws Exception {
-        try {
-            labCrud = new LaboratorioCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(LaboratorioCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test3CrudAtualizar() throws Exception {
+
         try {
             labCrud.crudAtualizar(lab3,"municipio","Serra");
         }
@@ -104,13 +89,7 @@ public class LaboratorioCrudTest {
     }
     
     @Test
-    public void testCrudRemover() throws Exception {
-        try {
-            labCrud = new LaboratorioCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(LaboratorioCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test4CrudRemover() throws Exception {
         try {
             labCrud.crudRemover("municipio","Serra");
         }

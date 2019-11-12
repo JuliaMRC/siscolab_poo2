@@ -5,6 +5,7 @@
  */
 package siscolab.cruds;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,18 +15,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import siscolab.modelos.Paciente;
 import siscolab.modelos.PlanoSaude;
-import static siscolab.modelos.Validacao.convertToDateString;
 
 /**
  *
  * @author jumrcampos
  */
-public class PacienteCrud extends PostgresConn implements ICrud<String, String> {
-
-    public PacienteCrud(String connString, String user, String pass) throws SQLException {
-        super(connString, user, pass);
-    } 
+public class PacienteCrud implements ICrud<String, String> {
     
+    PostgresConnSingleton connSing = PostgresConnSingleton.getInstancia();
+    Connection conexao = connSing.getConn();
+    
+    public PacienteCrud(){}
+
     @Override
     public void crudCriar(HasCrud classe) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         Paciente cl = (Paciente) classe;
@@ -35,29 +36,24 @@ public class PacienteCrud extends PostgresConn implements ICrud<String, String> 
         
         String sql = String.format("INSERT INTO USUARIO_FISICO (cpf, rg, nome, sobrenome, nascimento, email, senha) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n", cl.getCpf(), cl.getRg(), cl.getNome(), cl.getSobrenome(), data, cl.getEmail(), cl.getSenha());
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
         
         sql = String.format("INSERT INTO PACIENTE (plano_saude_fk, municipio, cpf_fk) VALUES (%d, '%s', '%s')", cl.getPlanoSaude().getNumero(), cl.getMunicipioResidencia(), cl.getCpf());
-        System.out.println(sql);
         
         stmt.executeUpdate(sql);
-        stmt.close();
-        this.fechar();
     }
 
     @Override
     public HasCrud crudLer(String ch, String val) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         Paciente cl = new Paciente();
-        PlanoSaudeCrud c = new PlanoSaudeCrud(this.getConnString(), this.getUser(), this.getPass());
+        PlanoSaudeCrud c = new PlanoSaudeCrud();
         Statement stmt;
         
         String sql = String.format("SELECT * FROM PACIENTE\n");        
         sql += String.format("WHERE '%s' = '%s'", ch, val);
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         
         
@@ -75,12 +71,7 @@ public class PacienteCrud extends PostgresConn implements ICrud<String, String> 
             }
             cl.setSenha(rs.getString("senha"));
             cl.setPlanoSaude(a);
-            //String date = convertToDateString(rs.getDate("validade"));
-            //cl.setData(date);
         }
-        
-        stmt.close();
-        this.fechar();
         
         return cl;
     }
@@ -103,11 +94,8 @@ public class PacienteCrud extends PostgresConn implements ICrud<String, String> 
         sql += String.format("municipio = '%s',\n", cl.getMunicipioResidencia());
         sql += String.format("cpf_fk = '%s'", cl.getCpf());
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
-        stmt.close();
-        this.fechar();
     }
 
     @Override
@@ -116,25 +104,21 @@ public class PacienteCrud extends PostgresConn implements ICrud<String, String> 
         
         String sql = String.format("DELETE FROM PACIENTE\nWHERE '%s' = '%s'", chave, valor);
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
  
-        stmt.close();
-        this.fechar();
     }
 
     @Override
     public List crudListar() throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         ArrayList<Paciente> lst = new ArrayList();
         Statement stmt;
-        PlanoSaudeCrud ec = new PlanoSaudeCrud(this.getConnString(), this.getUser(), this.getPass());
+        PlanoSaudeCrud ec = new PlanoSaudeCrud();
 
         String sql = "SELECT * FROM PACIENTE as m\n";
         sql += "INNER JOIN USUARIO_FISICO as p on (m.cpf_fk = p.cpf)";
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         
         while (rs.next()) {
@@ -152,13 +136,10 @@ public class PacienteCrud extends PostgresConn implements ICrud<String, String> 
                 Logger.getLogger(PacienteCrud.class.getName()).log(Level.SEVERE, null, ex);
             }
             cl.setSenha(rs.getString("senha"));
-            //String date = convertToDateString(rs.getDate("validade"));
-            //cl.setData(date);
         }
         
         stmt.close();
-        this.fechar();
-        
+        connSing.fechar();
         return lst;
     }
     

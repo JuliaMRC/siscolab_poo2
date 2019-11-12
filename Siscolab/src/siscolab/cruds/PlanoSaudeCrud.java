@@ -5,12 +5,12 @@
  */
 package siscolab.cruds;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Date;
 import siscolab.modelos.PlanoSaude;
 import static siscolab.modelos.Validacao.convertToDateString;
 
@@ -18,40 +18,37 @@ import static siscolab.modelos.Validacao.convertToDateString;
  *
  * @author PHANTOM
  */
-public class PlanoSaudeCrud extends PostgresConn implements ICrud<String, String> {
+public class PlanoSaudeCrud implements ICrud<String, String> {
+    
+    PostgresConnSingleton connSing = PostgresConnSingleton.getInstancia();
+    Connection conexao = connSing.getConn();
 
-    public PlanoSaudeCrud(String connString, String user, String pass) throws SQLException {
-        super(connString, user, pass);
-    }
+    public PlanoSaudeCrud(){}
 
     @Override
     public void crudCriar(HasCrud classe) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
-        Statement stmt;
         PlanoSaude cl = (PlanoSaude) classe;
-        
+        Statement stmt;
+   
         String data = utils.converteData(cl.getValidade());
 
         String sql = String.format("INSERT INTO PLANO_SAUDE(numero, validade, empresa) VALUES('%s', '%s', '%s')", cl.getNumero(), data, cl.getEmpresa());
-        
-        this.conectar();
-        stmt = this.getConn().createStatement();
+
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
-        stmt.close();
-        this.fechar();
     }
 
     @Override
     public HasCrud crudLer(String chave, String valor) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
+        PlanoSaude cl = new PlanoSaude();
         Statement stmt;
-        PlanoSaude cl;
+       
         
         String sql = String.format("SELECT * FROM PLANO_SAUDE\nWHERE %s = '%s'", chave, valor);
      
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
-        cl = new PlanoSaude();
-        
+
         
         while (rs.next()) {
             cl.setNumero(rs.getInt("numero"));
@@ -60,16 +57,13 @@ public class PlanoSaudeCrud extends PostgresConn implements ICrud<String, String
             cl.setData(date);
         }
         
-        stmt.close();
-        this.fechar();
-        
         return cl;
     }
 
     @Override
     public void crudAtualizar(HasCrud classe, String chave, String valor) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
+        PlanoSaude cl = new PlanoSaude();
         Statement stmt;
-        PlanoSaude cl = (PlanoSaude) classe;
         
         String sql = "";
         
@@ -80,11 +74,8 @@ public class PlanoSaudeCrud extends PostgresConn implements ICrud<String, String
         sql += String.format("validade = '%s'\n", data);
         sql += String.format("WHERE %s = '%s'", chave, valor);
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
-        stmt.close();
-        this.fechar();
     }
 
     @Override
@@ -93,11 +84,9 @@ public class PlanoSaudeCrud extends PostgresConn implements ICrud<String, String
         
         String sql = "";        
         sql += String.format("DELETE FROM PLANO_SAUDE\nWHERE %s = %s", ch, val);
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
-        stmt.close();
-        this.fechar();
     }
 
     @Override
@@ -106,9 +95,8 @@ public class PlanoSaudeCrud extends PostgresConn implements ICrud<String, String
         Statement stmt;
 
         String sql = "SELECT * FROM PLANO_SAUDE";
-        
-        this.conectar();
-        stmt = this.getConn().createStatement();
+
+        stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         
         while(rs.next()) {
@@ -121,8 +109,7 @@ public class PlanoSaudeCrud extends PostgresConn implements ICrud<String, String
         }
         
         stmt.close();
-        this.fechar();
-        
+        connSing.fechar();
         return lst;
     }
 }

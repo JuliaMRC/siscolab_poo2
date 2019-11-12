@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 import siscolab.cruds.MedicoCrud;
 import siscolab.modelos.Especialidade;
 import siscolab.modelos.Medico;
@@ -20,9 +22,12 @@ import siscolab.modelos.Medico;
  *
  * @author user
  */
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+
 public class MedicoCrudTest {
     
-    MedicoCrud medCrud;
+    MedicoCrud medCrud = new MedicoCrud();
     Medico med1, med2;
     Especialidade esp1, esp2;
     ArrayList lista;
@@ -80,14 +85,7 @@ public class MedicoCrudTest {
     }
 
     @Test
-    public void testCrudCriar() throws Exception {
-        try {
-            medCrud = new MedicoCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(MedicoCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+    public void test1CrudCriar() throws Exception {
         try {
             medCrud.crudCriar(med1);
         }
@@ -98,13 +96,7 @@ public class MedicoCrudTest {
     }
     
     @Test
-    public void testCrudLer() throws Exception {
-        try {
-            medCrud = new MedicoCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(MedicoCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test2CrudLer() throws Exception {
         try {
             med2 = (Medico)medCrud.crudLer("nome","Letícia");
         }
@@ -115,13 +107,7 @@ public class MedicoCrudTest {
     }
     
     @Test
-    public void testCrudAtualizar() throws Exception {
-        try {
-            medCrud = new MedicoCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(MedicoCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test3CrudAtualizar() throws Exception {
         try {
             medCrud.crudAtualizar(med2,"nome","Júlia");
         }
@@ -132,13 +118,7 @@ public class MedicoCrudTest {
     }
     
     @Test
-    public void testCrudRemover() throws Exception {
-        try {
-            medCrud = new MedicoCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(MedicoCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test4CrudRemover() throws Exception {
         try {
             medCrud.crudRemover("cpf_fk","35092041072");
         }
@@ -149,13 +129,7 @@ public class MedicoCrudTest {
     }
     
     @Test
-    public void testCrudListar() throws Exception {
-        try {
-            medCrud = new MedicoCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(MedicoCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test5CrudListar() throws Exception {
         try {
             lista = (ArrayList)medCrud.crudListar();
         }

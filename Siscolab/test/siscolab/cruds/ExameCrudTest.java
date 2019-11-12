@@ -11,7 +11,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.junit.Assert.fail;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import siscolab.cruds.ExameCrud;
 import siscolab.modelos.Especialidade;
 import siscolab.modelos.Exame;
@@ -23,13 +25,15 @@ import siscolab.modelos.PlanoSaude;
  *
  * @author user
  */
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ExameCrudTest {
     
-    ExameCrud exCrud;  
-    PlanoSaudeCrud pCrud;
-    EspecialidadeCrud espCrud;
-    MedicoCrud medCrud;
-    PacienteCrud pacCrud;
+    ExameCrud exCrud = new ExameCrud(); 
+    PlanoSaudeCrud pCrud = new PlanoSaudeCrud();
+    EspecialidadeCrud espCrud = new EspecialidadeCrud();
+    MedicoCrud medCrud = new MedicoCrud();
+    PacienteCrud pacCrud = new PacienteCrud();
     Exame ex1, ex2, ex3;
     ArrayList lista;
     int[] dat1, dat2, dat3;
@@ -119,19 +123,7 @@ public class ExameCrudTest {
     }
 
     @Test
-    public void testCrudCriar() throws Exception {
-        try {
-            pCrud = new PlanoSaudeCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-            espCrud = new EspecialidadeCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-            medCrud = new MedicoCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-            pacCrud = new PacienteCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-            exCrud = new ExameCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-            
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(ExameCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+    public void test1CrudCriar() throws Exception {
         try {
             pCrud.crudCriar(plano);
             espCrud.crudCriar(esp);
@@ -146,13 +138,7 @@ public class ExameCrudTest {
     }
     
     @Test
-    public void testCrudLer() throws Exception {
-        try {
-            exCrud = new ExameCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(ExameCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test2CrudLer() throws Exception {
         try {
             ex2 = (Exame)exCrud.crudLer("nome","Letícia");
         }
@@ -163,13 +149,7 @@ public class ExameCrudTest {
     }
     
     @Test
-    public void testCrudAtualizar() throws Exception {
-        try {
-            exCrud = new ExameCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(ExameCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test3CrudAtualizar() throws Exception {
         try {
             exCrud.crudAtualizar(ex3,"data_execucao","2021-05-21");
         }
@@ -180,13 +160,7 @@ public class ExameCrudTest {
     }
     
     @Test
-    public void testCrudRemover() throws Exception {
-        try {
-            exCrud = new ExameCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(ExameCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test4CrudRemover() throws Exception {
         try {
             exCrud.crudRemover("cpf_fk","16951782709");
         }
@@ -197,13 +171,7 @@ public class ExameCrudTest {
     }
     
     @Test
-    public void testCrudListar() throws Exception {
-        try {
-            exCrud = new ExameCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-        } catch (Exception ex) {
-            fail("Falha ao conectar ao banco de dados");
-            Logger.getLogger(ExameCrudTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void test5CrudListar() throws Exception {
         try {
             lista = (ArrayList)exCrud.crudListar();
         }

@@ -5,130 +5,102 @@
  */
 package siscolab.cruds;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 import siscolab.modelos.PlanoSaude;
 
 /**
  *
  * @author Julia
  */
+
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class PlanoSaudeCrudTest {
-
-    public PlanoSaudeCrudTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
+    PlanoSaudeCrud planoSaudeCrud = new PlanoSaudeCrud();
+    int[] data, data2;
+    PlanoSaude planoSaude, planoSaude2;
+    
     @Before
-    public void setUp() {
+    public void setUp() throws Exception{
+
+        data = new int[3];
+        data[0] = 2;
+        data[1] = 2;
+        data[2] = 2019;
+        
+        
+        data2 = new int[3];
+        data2[0] = 11;
+        data2[1] = 12;
+        data2[2] = 2021;
+        
+        planoSaude = new PlanoSaude(1, data, "Unimed");
+        
+        planoSaude2 = new PlanoSaude(2, data2, "Samp");
+    }
+    
+    public PlanoSaudeCrudTest() {
+        
     }
 
-    @After
-    public void tearDown() {
-    }
 
     @Test
-    public void testCrudCriar() throws Exception {
-
+    public void test1CrudCriar() throws Exception {
         try {
-            PlanoSaudeCrud planoSaudeCrud = new PlanoSaudeCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-         
-            
-            try {
-                int[] data = {02, 02, 2019};
-                PlanoSaude planoSaude = new PlanoSaude(1, data, "Unimed");
-                planoSaudeCrud.crudCriar(planoSaude);
+            planoSaudeCrud.crudCriar(planoSaude);
 
-            } catch (Exception ex) {
-                fail("Erro no banco etc");
-            }
-        } catch (SQLException ex) {
-            fail("Não foi possível se conectar com o banco");
+        } catch (Exception ex) {
+            fail("Erro no banco etc");
         }
+        
 
     }
 
-    /* Test of crudLer method, of class PlanoSaudeCrud.
-     */
     @Test
-    public void testCrudLer() throws Exception {
+    public void test2CrudLer() throws Exception {
+        PlanoSaude planoSaudeLer = new PlanoSaude();
         try {
-            PlanoSaudeCrud planoSaudeCrud = new PlanoSaudeCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-            try {
-                PlanoSaude planoSaudeLer = new PlanoSaude();
-                planoSaudeLer = (PlanoSaude) planoSaudeCrud.crudLer("empresa", "Unimed");
-            } catch (Exception ex) {
-                fail("erro ao tentar comunicação com banco");
-            }
-        } catch (SQLException ex) {
-            fail("Não foi possível se conectar com o banco");
-        }
-    }
-
-    @Test
-    public void testCrudAtualizar() throws Exception {
-        try {
-            PlanoSaudeCrud planoSaudeCrud = new PlanoSaudeCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-            try {
-                int[] data = {11, 12, 2021};
-                PlanoSaude planoSaude = new PlanoSaude(1, data, "Samp");
-                planoSaudeCrud.crudAtualizar(planoSaude, "numero", "1");
-
-            } catch (Exception ex) {
-                fail("Erro no banco etc");
-            }
-        } catch (SQLException ex) {
-            fail("Não foi possível se conectar com o banco");
+            planoSaudeLer = (PlanoSaude) planoSaudeCrud.crudLer("empresa", "Unimed");
+        } catch (Exception ex) {
+            fail("erro ao tentar comunicação com banco");
         }
     }
 
     @Test
-    public void testCrudRemover() throws Exception {
+    public void test3CrudAtualizar() throws Exception {
         try {
-            PlanoSaudeCrud planoSaudeCrud = new PlanoSaudeCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-            try {
-                planoSaudeCrud.crudRemover("numero", "3");
+            planoSaudeCrud.crudAtualizar(planoSaude2, "empresa", "Cartao de todos");
+        } catch (Exception ex) {
+            fail("Erro no banco etc");
+        }
+    }
 
-            } catch (Exception ex) {
-                fail("Erro no banco ao tentar remover");
-            }
-        } catch (SQLException ex) {
-            fail("Não foi possível se conectar com o banco");
+    @Test
+    public void test4CrudRemover() throws Exception {
+        try {
+            planoSaudeCrud.crudRemover("numero", "1");
+        } catch (Exception ex) {
+            fail("Erro no banco ao tentar remover");
         }
 
     }
     
     @Test
-    public void testCrudListar() throws Exception {
+    public void test5CrudListar() throws Exception {
+        List<PlanoSaude> lst = new ArrayList();
         try {
-            PlanoSaudeCrud planoSaudeCrud = new PlanoSaudeCrud("jdbc:postgresql://motty.db.elephantsql.com/bveutvuk", "bveutvuk", "Bjtrmmzo1AuDKY4EtdIBE_aAxlr_78he");
-            try {
-                List<PlanoSaude> lst = new ArrayList();
-                lst = planoSaudeCrud.crudListar();
-                System.out.println(lst);
+            lst = planoSaudeCrud.crudListar();
+            System.out.println(lst);
 
-            } catch (Exception ex) {
-                fail("Erro ao listar planos de Saude");
-                
-            }
-        } catch (SQLException ex) {
-            fail("Não foi possível se conectar com o banco");
+        } catch (Exception ex) {
+            fail("Erro ao listar planos de Saude");     
         }
+
     }
 
 }

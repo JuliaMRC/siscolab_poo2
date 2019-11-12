@@ -5,6 +5,7 @@
  */
 package siscolab.cruds;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,11 +19,12 @@ import siscolab.modelos.Laboratorio;
  *
  * @author Lavinia
  */
-public class LaboratorioCrud extends PostgresConn implements ICrud<String, String> {
+public class LaboratorioCrud implements ICrud<String, String> {
+    
+    PostgresConnSingleton connSing = PostgresConnSingleton.getInstancia();
+    Connection conexao = connSing.getConn();
 
-    public LaboratorioCrud(String connString, String user, String pass) throws SQLException {
-        super(connString, user, pass);
-    }
+    public LaboratorioCrud(){}
 
     @Override
     public void crudCriar(HasCrud classe) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
@@ -32,11 +34,8 @@ public class LaboratorioCrud extends PostgresConn implements ICrud<String, Strin
         String sql = String.format("INSERT INTO USUARIO_LABORATORIO (cnpj, nome, email, senha) VALUES ('%s', '%s', '%s', '%s');\n", cl.getCnpj(), cl.getNomeFantasia(), cl.getEmail(), cl.getSenha());
         sql += String.format("INSERT INTO LABORATORIO (municipio, cnpj_fk) VALUES ('%s', '%s')", cl.getMunicipioAtendimento(), cl.getCnpj());
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
-        stmt.close();
-        this.fechar();
     }
 
     @Override
@@ -48,8 +47,7 @@ public class LaboratorioCrud extends PostgresConn implements ICrud<String, Strin
         sql += "INNER JOIN USUARIO_LABORATORIO as u on (l.cnpj_fk = u.cnpj)\n";
         sql += String.format("WHERE '%s' = '%s'", ch, val);
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
             
         while (rs.next()) {
@@ -63,9 +61,6 @@ public class LaboratorioCrud extends PostgresConn implements ICrud<String, Strin
             }
             cl.setSenha(rs.getString("senha"));
         }
-        
-        stmt.close();
-        this.fechar();
         
         return cl;
     }
@@ -82,8 +77,7 @@ public class LaboratorioCrud extends PostgresConn implements ICrud<String, Strin
         sql += String.format("email = '%s',\n", cl.getEmail());
         sql += String.format("senha = '%s'", cl.getSenha());
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
         
         sql = "";
@@ -91,18 +85,9 @@ public class LaboratorioCrud extends PostgresConn implements ICrud<String, Strin
         sql += String.format("UPDATE LABORATORIO set municipio = '%s',\n", cl.getMunicipioAtendimento());
         sql += String.format("cnpj_fk = '%s'\n", cl.getCnpj());
         
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
         
-        /*sql = "";
-        
-        sql += String.format("UPDATE LABORATORIO set cnpj_fk = '%s',\n", cl.getCnpj());
-        sql += String.format("cnpj_fk = '%s',\n", cl.getCnpj());
-        
-        stmt = this.getConn().createStatement();
-        stmt.executeUpdate(sql);*/
-        stmt.close();
-        this.fechar();
     }
 
     @Override
@@ -111,12 +96,10 @@ public class LaboratorioCrud extends PostgresConn implements ICrud<String, Strin
         
         String sql = String.format("DELETE FROM LABORATORIO\nWHERE '%s' = '%s'", chave, valor);
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
- 
         stmt.close();
-        this.fechar();
+        connSing.fechar();
     }
 
     @Override
