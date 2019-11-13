@@ -11,8 +11,17 @@ import java.sql.SQLException;
  *
  * @author phantom
  */
-public abstract class PostgresConn {
+public class PostgresConn {
     private final String user;
+    private final String pass;
+    private final String connString;
+    private Connection conn = null;
+    
+    public PostgresConn(String connString, String user, String pass) throws SQLException {
+        this.user = user;
+        this.pass = pass;
+        this.connString = connString;
+    }
 
     public String getUser() {
         return user;
@@ -25,18 +34,10 @@ public abstract class PostgresConn {
     public String getConnString() {
         return connString;
     }
-    private final String pass;
-    private final String connString;
-    private Connection conn = null;
+    
 
     public Connection getConn() {
         return conn;
-    }
-    
-    public PostgresConn(String connString, String user, String pass) throws SQLException {
-        this.user = user;
-        this.pass = pass;
-        this.connString = connString;
     }
     
     public void conectar() throws SQLException {

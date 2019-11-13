@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package siscolab.cruds;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,11 +15,12 @@ import siscolab.modelos.Especialidade;
  *
  * @author phantom
  */
-public class EspecialidadeCrud extends PostgresConn implements ICrud<String, String> {
+public class EspecialidadeCrud implements ICrud<String, String> {
     
-    public EspecialidadeCrud(String connString, String user, String pass) throws SQLException {
-        super(connString, user, pass);
-    } 
+    PostgresConnSingleton connSing = PostgresConnSingleton.getInstancia();
+    Connection conexao = connSing.getConn();
+    
+    public EspecialidadeCrud(){} 
 
     @Override
     public void crudCriar(HasCrud classe) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
@@ -26,12 +28,9 @@ public class EspecialidadeCrud extends PostgresConn implements ICrud<String, Str
         Especialidade cl = (Especialidade) classe;
         
         String sql = String.format("INSERT INTO ESPECIALIDADE (especialidade) VALUES ('%s')", cl.getEspecialidade());
-    
-        this.conectar();
-        stmt = this.getConn().createStatement();
+
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
-        stmt.close();
-        this.fechar();
     }
 
     @Override
@@ -40,18 +39,14 @@ public class EspecialidadeCrud extends PostgresConn implements ICrud<String, Str
         Especialidade cl;
         
         String sql = String.format("SELECT * FROM ESPECIALIDADE\nWHERE %s = '%s'", chave, valor);
-        
-        this.conectar();
-        stmt = this.getConn().createStatement();
+
+        stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         cl = new Especialidade();
         
         while(rs.next()) {
             cl.setEspecialidade(rs.getString("especialidade"));
         }
-        
-        stmt.close();
-        this.fechar();
         
         return cl;
     }
@@ -62,12 +57,9 @@ public class EspecialidadeCrud extends PostgresConn implements ICrud<String, Str
         Especialidade cl = (Especialidade) classe;
         
         String sql = String.format("UPDATE ESPECIALIDADE set especialidade = '%s'\nWHERE %s = '%s'", cl.getEspecialidade(), chave, valor);
-        
-        this.conectar();
-        stmt = this.getConn().createStatement();
+
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
-        stmt.close();
-        this.fechar();
     }
 
     @Override
@@ -75,13 +67,10 @@ public class EspecialidadeCrud extends PostgresConn implements ICrud<String, Str
         Statement stmt;
         
         String sql = String.format("DELETE FROM ESPECIALIDADE\nWHERE %s = '%s'", chave, valor);
-        
-        this.conectar();
-        stmt = this.getConn().createStatement();
+
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
- 
-        stmt.close();
-        this.fechar();
+
     }
 
     @Override
@@ -90,9 +79,8 @@ public class EspecialidadeCrud extends PostgresConn implements ICrud<String, Str
         Statement stmt;
         
         String sql = "SELECT * FROM ESPECIALIDADE";
-        
-        this.conectar();
-        stmt = this.getConn().createStatement();
+
+        stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         
         while(rs.next()) {
@@ -102,7 +90,7 @@ public class EspecialidadeCrud extends PostgresConn implements ICrud<String, Str
         }
         
         stmt.close();
-        this.fechar();
+        connSing.fechar();
         
         return lst;
     }

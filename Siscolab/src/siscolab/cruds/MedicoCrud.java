@@ -5,11 +5,11 @@
  */
 package siscolab.cruds;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,51 +20,33 @@ import siscolab.modelos.Especialidade;
  *
  * @author PHANTOM
  */
-public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
+public class MedicoCrud implements ICrud<String, String> {
     
-    public MedicoCrud(String connString, String user, String pass) throws SQLException {
-        super(connString, user, pass);
-    } 
+    PostgresConnSingleton connSing = PostgresConnSingleton.getInstancia();
+    Connection conexao = connSing.getConn();
+    
+    public MedicoCrud(){} 
+    
 
     @Override
     public void crudCriar(HasCrud classe) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         Statement stmt;
         Medico cl = (Medico) classe;
-        String data;
-        System.out.println("estou aqui: " + cl.getCpf());
-        System.out.println("estou aqui: " + cl.getCrm());
-        System.out.println("estou aqui: " + Arrays.toString(cl.getDataNascimento()));
-        if(cl.getDataNascimento()[1]<10){
-            
-            data = String.format("%d-0%d-", cl.getDataNascimento()[2], cl.getDataNascimento()[1]);
-        }
-        else{
-            data = String.format("%d-%d-", cl.getDataNascimento()[2], cl.getDataNascimento()[1]);
-        }
         
-        if(cl.getDataNascimento()[1]<10){
-            data += String.format("0%d", cl.getDataNascimento()[0]);
-        }
-        else{
-            data += String.format("%d", cl.getDataNascimento()[0]);
-        }
+        String data = utils.converteData(cl.getDataNascimento());
         
         String sql = String.format("INSERT INTO USUARIO_FISICO (cpf, rg, nome, sobrenome, nascimento, email, senha) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s');\n", cl.getCpf(), cl.getRg(), cl.getNome(), cl.getSobrenome(), data, cl.getEmail(), cl.getSenha());
         sql += String.format("INSERT INTO MEDICO (crm, especialidade_fk, municipio, cpf_fk) VALUES ('%s', '%s', '%s', '%s')", cl.getCrm(), cl.getEspecialidade().getEspecialidade(), cl.getMunicipioAtuacao(), cl.getCpf());
     
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
-        stmt.close();
-        this.fechar();
-            
     }
 
     @Override
     public HasCrud crudLer(String chave, String valor) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         Statement stmt;
-        Medico cl;
-        EspecialidadeCrud ec = new EspecialidadeCrud(this.getConnString(), this.getUser(), this.getPass());
+        Medico cl = new Medico();
+        /*EspecialidadeCrud ec = new EspecialidadeCrud(this.getConnString(), this.getUser(), this.getPass());
         
         String sql = "SELECT *, cpf_fk FROM MEDICO as m\n";
         sql += String.format("INNER JOIN USUARIO_FISICO as u on (m.cpf_fk = u.cpf)\n");
@@ -73,8 +55,7 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
         this.conectar();
         stmt = this.getConn().createStatement();
         ResultSet rs = stmt.executeQuery(sql);
-        cl = new Medico();
-        
+
         
         while (rs.next()) {
             Especialidade esp = (Especialidade) ec.crudLer("especialidade", rs.getString("especialidade_fk"));
@@ -96,7 +77,7 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
         }
         
         stmt.close();
-        this.fechar();
+        this.fechar();*/
         
         return cl;
     }
@@ -120,11 +101,8 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
         sql += String.format("especialidade_fk = '%s',\n", cl.getEspecialidade().getEspecialidade());
         sql += String.format("cpf_fk = '%s'", cl.getCpf());
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
-        stmt.close();
-        this.fechar();
     }
 
     @Override
@@ -132,19 +110,16 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
         Statement stmt;
         
         String sql = String.format("DELETE FROM MEDICO\nWHERE '%s' = '%s'", chave, valor);
-        
-        this.conectar();
-        stmt = this.getConn().createStatement();
+
+        stmt = conexao.createStatement();
         stmt.executeUpdate(sql);
  
-        stmt.close();
-        this.fechar();
     }
 
     @Override
     public List crudListar() throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         ArrayList<Medico> lst = new ArrayList();
-        Statement stmt;
+        /*Statement stmt;
         EspecialidadeCrud ec = new EspecialidadeCrud(this.getConnString(), this.getUser(), this.getPass());
 
         String sql = "SELECT * FROM MEDICO as m\n";
@@ -176,7 +151,7 @@ public class MedicoCrud extends PostgresConn implements ICrud<String, String> {
         }
         
         stmt.close();
-        this.fechar();
+        this.fechar();*/
         
         return lst;
     }
