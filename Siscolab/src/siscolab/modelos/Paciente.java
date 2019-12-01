@@ -5,13 +5,12 @@
  */
 package siscolab.modelos;
 
-import java.util.Date;
 import siscolab.cruds.HasCrud;
 /**
  *
  * @author 20171bsi0456
  */
-public class Paciente extends UsuarioFisico implements HasCrud{
+public class Paciente extends UsuarioFisico implements HasCrud, Observer{
     private static final long serialVersionUID = 1L;
     private PlanoSaude planoSaude;
     private String municipioResidencia;
@@ -41,6 +40,11 @@ public class Paciente extends UsuarioFisico implements HasCrud{
 
     public void setMunicipioResidencia(String municipioResidencia) {
         this.municipioResidencia = municipioResidencia;
+    }
+    
+    @Override
+    public void update(Observable obs) {
+        System.out.println("Paciente. O estado do exame foi alterado.");
     }
 
     public static class Builder{

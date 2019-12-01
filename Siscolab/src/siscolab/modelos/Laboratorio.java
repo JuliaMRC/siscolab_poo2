@@ -5,7 +5,6 @@
  */
 package siscolab.modelos;
 
-import java.util.Date;
 import siscolab.cruds.HasCrud;
 
 /**

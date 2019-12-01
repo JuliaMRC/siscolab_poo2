@@ -46,14 +46,13 @@ public class MedicoCrud implements ICrud<String, String> {
     public HasCrud crudLer(String chave, String valor) throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         Statement stmt;
         Medico cl = new Medico();
-        /*EspecialidadeCrud ec = new EspecialidadeCrud(this.getConnString(), this.getUser(), this.getPass());
+        EspecialidadeCrud ec = new EspecialidadeCrud();
         
         String sql = "SELECT *, cpf_fk FROM MEDICO as m\n";
         sql += String.format("INNER JOIN USUARIO_FISICO as u on (m.cpf_fk = u.cpf)\n");
         sql += String.format("WHERE %s = '%s'", chave, valor);
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
 
         
@@ -75,9 +74,7 @@ public class MedicoCrud implements ICrud<String, String> {
             //String date = convertToDateString(rs.getDate("validade"));
             //cl.setData(date);
         }
-        
-        stmt.close();
-        this.fechar();*/
+
         
         return cl;
     }
@@ -119,14 +116,13 @@ public class MedicoCrud implements ICrud<String, String> {
     @Override
     public List crudListar() throws UnsupportedOperationException, SQLException, ClassNotFoundException {
         ArrayList<Medico> lst = new ArrayList();
-        /*Statement stmt;
-        EspecialidadeCrud ec = new EspecialidadeCrud(this.getConnString(), this.getUser(), this.getPass());
+        Statement stmt;
+        EspecialidadeCrud ec = new EspecialidadeCrud();
 
         String sql = "SELECT * FROM MEDICO as m\n";
         sql += "INNER JOIN USUARIO_FISICO as p on (m.cpf_fk = p.cpf)";
         
-        this.conectar();
-        stmt = this.getConn().createStatement();
+        stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         
         while(rs.next()) {
@@ -151,7 +147,7 @@ public class MedicoCrud implements ICrud<String, String> {
         }
         
         stmt.close();
-        this.fechar();*/
+        connSing.fechar();
         
         return lst;
     }

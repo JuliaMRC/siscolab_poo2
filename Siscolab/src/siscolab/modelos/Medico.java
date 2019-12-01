@@ -10,7 +10,7 @@ import siscolab.cruds.HasCrud;
  *
  * @author 20171bsi0456
  */
-public class Medico extends UsuarioFisico implements HasCrud {
+public class Medico extends UsuarioFisico implements HasCrud, Observer {
     private static final long serialVersionUID = 1L;
     private String crm;
     private Especialidade especialidade;
@@ -58,6 +58,12 @@ public class Medico extends UsuarioFisico implements HasCrud {
     public void setMunicipioAtuacao(String municipioAtuacao) {
         this.municipioAtuacao = municipioAtuacao;
     }
+
+    @Override
+    public void update(Observable obs) {
+        System.out.println("Médico. O estado do exame foi alterado.");
+    }
+    
     
     
     public static class Builder{

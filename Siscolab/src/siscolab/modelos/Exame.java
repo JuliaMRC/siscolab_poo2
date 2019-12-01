@@ -17,7 +17,7 @@ import siscolab.cruds.HasCrud;
 
 // Forma da data = int[dd, mm, aaaa]
 
-public class Exame implements HasCrud {
+public class Exame extends Observable implements HasCrud {
     private String tipoExame;
     private int[] dataPrazo;
     private String materia;
@@ -166,6 +166,8 @@ public class Exame implements HasCrud {
     
     public void setEstado(String estado){
         this.estado = estado;
+        
+        notifyObserver();
     }
 
     private void setLaboratorio(Laboratorio laboratorio) {

@@ -42,9 +42,15 @@ public class ExameCrudTest {
     PlanoSaude plano;
     Especialidade esp;
     
+
+    
     
     @Before
     public void setUp() throws Exception {
+        
+        //ex1.addObserver(med);
+        //ex1.addObserver(pac);
+        
         dat1 = new int[3];
         dat1[0] = 21;
         dat1[1] = 5;
@@ -88,6 +94,10 @@ public class ExameCrudTest {
         pac.setMunicipioResidencia("Serra");
         
         ex1 = new Exame();
+        
+        ex1.addObserver(med);
+        ex1.addObserver(pac);
+        
         ex1.setDataExecucao(dat1);
         ex1.setDataPrazo(dat1);
         ex1.setDataRequerimento(dat1);
@@ -99,6 +109,7 @@ public class ExameCrudTest {
         ex1.setReagente("reag1");
         ex1.setResultado("None");
         ex1.setTipoExame("Sangue");
+        
         
         ex2 = new Exame();
         
@@ -130,6 +141,7 @@ public class ExameCrudTest {
             medCrud.crudCriar(med);
             pacCrud.crudCriar(pac);
             exCrud.crudCriar(ex1);
+            
         }
         catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ExameCrudTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -151,7 +163,7 @@ public class ExameCrudTest {
     @Test
     public void test3CrudAtualizar() throws Exception {
         try {
-            exCrud.crudAtualizar(ex3,"data_execucao","2021-05-21");
+            exCrud.crudAtualizar(ex3,"estado","Pronto");
         }
         catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ExameCrudTest.class.getName()).log(Level.SEVERE, null, ex);

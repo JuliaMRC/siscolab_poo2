@@ -133,14 +133,15 @@ public class ExameCrud implements ICrud<String, String> {
         MedicoCrud mc = new MedicoCrud();
 
         String sql = "SELECT * FROM MEDICO\n";
+        
 
         stmt = conexao.createStatement();
         ResultSet rs = stmt.executeQuery(sql);
         
         while (rs.next()) {
             Exame cl = new Exame();
-            Medico m = (Medico)mc.crudLer("cpf_fk", rs.getString("medico_fk"));
-            Paciente p = (Paciente)pc.crudLer("cpf_fk", rs.getString("paciente_fk"));
+            Medico m = (Medico)mc.crudLer("cpf_fk", rs.getString("cpf_fk"));
+            Paciente p = (Paciente)pc.crudLer("cpf_fk", rs.getString("cpf_fk"));
             cl.setTipoExame(rs.getString("tipo"));
             cl.setMateria(rs.getString("materia"));
             cl.setMedico(m);
